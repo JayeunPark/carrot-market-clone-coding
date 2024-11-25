@@ -1,3 +1,24 @@
+/* directives*/
+/* base는 reset css랑 역할이 비슷함. 그리고 defaultcss를 줌 */
 @tailwind base;
+/* plugins를 위해 존재함 
+컴포넌트들을 추상화하기 위해 존재함
+*/
 @tailwind components;
+/* generated 컴파일러가 생성된 모든 code를 넣는 
+placeholder임 모든 곳에서 사용할 수 있게 함*/
 @tailwind utilities;
+
+/* layer은 각 directives를 확장할 수 있게 함*/
+@layer base {
+  a {
+    @apply text-orange-500;
+  }
+}
+@layer utilities {
+  /* .text-bigger-hello{
+    font-size: 444px;
+  } */
+}
+@layer components {
+}
