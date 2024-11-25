@@ -21,4 +21,7 @@ placeholder임 모든 곳에서 사용할 수 있게 함*/
   } */
 }
 @layer components {
+  .primary-btn {
+    @apply w-full bg-orange-500 text-white font-medium rounded-md text-center hover:bg-orange-400 transition-colors;
+  }
 }
