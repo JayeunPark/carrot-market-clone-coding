@@ -12,8 +12,12 @@ const checkPasswords = ({
   password: string;
   confirm_password: string;
 }) => {
-  password === confirm_password;
+  return password == confirm_password;
 };
+// 비밀번호 정규 표현식
+const passwordRegex = new RegExp(
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*?[#?!@$%^&*-]).+$/
+);
 
 // zod에게 데이터 설명
 const formSchema = z
@@ -24,10 +28,20 @@ const formSchema = z
         required_error: "Where is my username??",
       })
       .min(3, "Way too short!")
-      .max(10, "That is too loooong~~")
+      // .max(10, "That is too loooong~~")
+      .toLowerCase()
+      .trim()
+      // transform에서 리턴하는게 그 항목의 최종결과가 됨
+      .transform((username) => `🔥${username}🔥`)
       .refine(checkUsername, "No potatoes allowed!"),
     email: z.string().email(),
-    password: z.string().min(10),
+    password: z
+      .string()
+      .min(10)
+      .regex(
+        passwordRegex,
+        "A password must have lowercase,UPPERCASE, a number and special characters"
+      ),
     confirm_password: z.string().min(10),
   })
   .refine(checkPasswords, {
@@ -49,5 +63,7 @@ export async function createAccount(prevState: any, formData: FormData) {
   const result = formSchema.safeParse(data);
   if (!result.success) {
     return result.error.flatten();
+  } else {
+    console.log(result.data);
   }
 }
