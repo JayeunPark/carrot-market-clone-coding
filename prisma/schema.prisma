@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// schema.prisma는 데이터가 db안에서 어떤형태로 저장되어야하는지 설명함.
+
+generator client {
+  provider = "prisma-client-js"
+}
+// prisma는 번역기같은 것이라서 특정한 db를 사용할 필요는 없음.
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+// 식별자가 필요함
+model User {
+ id Int @id @default(autoincrement())
+ username String @unique
+ email String? @unique
+ password String?
+ phone String? @unique
+ github_id String? @unique
+//  이미지 업로드를 위한 prop
+ avatar String? 
+ created_at DateTime @default(now())
+//  사용자를 업데이트할때마다 시간을 넣어줄 것임 
+ updated_at DateTime @updatedAt
+}
