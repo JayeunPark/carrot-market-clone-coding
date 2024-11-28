@@ -8,22 +8,37 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 // prisma는 번역기같은 것이라서 특정한 db를 사용할 필요는 없음.
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
 // 식별자가 필요함
 model User {
- id Int @id @default(autoincrement())
- username String @unique
- email String? @unique
- password String?
- phone String? @unique
- github_id String? @unique
-//  이미지 업로드를 위한 prop
- avatar String? 
- created_at DateTime @default(now())
-//  사용자를 업데이트할때마다 시간을 넣어줄 것임 
- updated_at DateTime @updatedAt
+  id         Int        @id @default(autoincrement())
+  username   String     @unique
+  email      String?    @unique
+  password   String?
+  phone      String?    @unique
+  github_id  String?    @unique
+  //  이미지 업로드를 위한 prop
+  avatar     String?
+  created_at DateTime   @default(now())
+  //  사용자를 업데이트할때마다 시간을 넣어줄 것임 
+  updated_at DateTime   @updatedAt
+  SMSToken   SMSToken[]
 }
+
+model SMSToken {
+  id         Int      @id @default(autoincrement())
+  token      String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+}
+
+//person --> phone# --> sms(token)
+//token --> SMSToken <-> User ->log the user in ==>그래서 유저와 연결되어있어야함.
